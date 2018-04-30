@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Intelligence
 {
@@ -12,10 +11,10 @@ namespace Intelligence
 
 	public struct InputData
 	{
-		float[] inputDiskRotationVector;
-		float[] inputDiskRotationSpeedVector;
-		float[] inputBallPositionVector;
-		float[] inputBallSpeedVector;
+		public float[] inputDiskRotationVector;
+		public float[] inputDiskRotationSpeedVector;
+		public float[] inputBallPositionVector;
+		public float[] inputBallSpeedVector;
 		public InputData(float[] Dr, float[] Ds, float[] Bp, float[] Bs)
 		{
 			inputDiskRotationVector = Dr;
@@ -26,10 +25,10 @@ namespace Intelligence
 	}
 	public struct OutputData
 	{
-		float[] outputDiskRotationSpeedVector;
-		public OutputData(float x, float y, float z)
+		public float[] outputDiskRotationSpeedVector;
+		public OutputData(float[] rotSpeed)
 		{
-			outputDiskRotationSpeedVector = new float[3] { x, y, z };
+			outputDiskRotationSpeedVector = rotSpeed;
 		}
 	}
 }

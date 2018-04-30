@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Intelligence
 {
@@ -16,7 +15,7 @@ namespace Intelligence
 		{
 			//Evaluation
 
-			return new OutputData(0,0,0);
+			return new OutputData(null);
 		}
     }
 }
