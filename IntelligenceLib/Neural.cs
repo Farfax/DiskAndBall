@@ -14,20 +14,21 @@ namespace Intelligence
 		public static Random r = new Random(DateTime.Now.Millisecond);
 		public static float learnRate = 0.01f;
 
-		public static void CreateNetwork(int[] size, List<float[,]>weights)
+		public static void CreateNetwork(int[] size, List<float[,]> weights)
 		{
-			activeNetwork = new NeuralNetwork(size,weights);
+			activeNetwork = new NeuralNetwork(size, weights);
 
 		}
-		public static void CreateNetwork(int[] size)
-		{
-			activeNetwork = new NeuralNetwork(size);
+		/*		public static void CreateNetwork(int[] size)
+				{
+					activeNetwork = new NeuralNetwork(size);
 
-		}
+				}*/
 		public static void Randomize()
 		{
-			foreach (NeuralLayer l in activeNetwork.GetLayers()) {
-				foreach(NeuralNode n in l.nodes)
+			foreach (NeuralLayer l in activeNetwork.GetLayers())
+			{
+				foreach (NeuralNode n in l.nodes)
 					n.Randomize();
 			}
 		}
@@ -35,6 +36,15 @@ namespace Intelligence
 		public static NeuralNetwork GetNetwork()
 		{
 			return activeNetwork;
+		}
+
+		public static void SetWeight(int layer, int node, int node2, float newWeight)
+		{
+			if (node2 == activeNetwork.GetLayers()[layer].GetNodes()[node].weight.Length)
+				activeNetwork.GetLayers()[layer].GetNodes()[node].bias = newWeight;
+
+			else
+				activeNetwork.GetLayers()[layer].GetNodes()[node].weight[node2] = newWeight;
 		}
 
 		public static void Train(InputData inputData, OutputData expectedOutputData)
@@ -84,7 +94,7 @@ namespace Intelligence
 		NeuralLayer[] layers;
 		public int firstLayerSize;
 		int timesTrained;
-		public NeuralNetwork(int[] layerSizes, List<float[,]>weights)
+		public NeuralNetwork(int[] layerSizes, List<float[,]> weights)
 		{
 			layers = new NeuralLayer[layerSizes.Length - 1];
 			firstLayerSize = layerSizes[0];
@@ -95,23 +105,23 @@ namespace Intelligence
 			}
 			timesTrained = 1;
 		}
-		public NeuralNetwork(int[] layerSizes)
-		{
-			layers = new NeuralLayer[layerSizes.Length - 1];
-			firstLayerSize = layerSizes[0];
-			for (int i = 1; i < layerSizes.Length; i++)
+		/*	public NeuralNetwork(int[] layerSizes)
 			{
-				layers[i - 1] = new NeuralLayer(layerSizes[i], layerSizes[i - 1]);
-			}
-			timesTrained = 1;
-		}
+				layers = new NeuralLayer[layerSizes.Length - 1];
+				firstLayerSize = layerSizes[0];
+				for (int i = 1; i < layerSizes.Length; i++)
+				{
+					layers[i - 1] = new NeuralLayer(layerSizes[i], layerSizes[i - 1]);
+				}
+				timesTrained = 1;
+			}*/
 		public NeuralLayer[] GetLayers()
 		{
 			return layers;
 		}
 		public void Train(float[] inputData, float[] expectedOutputData)
 		{
-		//	for (int o = 0; o < 30; o++)
+			//	for (int o = 0; o < 30; o++)
 			{
 				timesTrained++;
 				List<float[]> forwardfeed = new List<float[]>(),
@@ -221,7 +231,7 @@ namespace Intelligence
 			for (int i = 0; i < size; i++)
 			{
 				nodes[i] = new NeuralNode(previousSize);
-			//Testing
+				//Testing
 			}
 		}
 		public NeuralNode[] GetNodes()
@@ -233,6 +243,7 @@ namespace Intelligence
 			for (int i = 0; i < nodes.Length; i++)
 			{
 				nodes[i].UpdateWeights(weights, i);
+				nodes[i].UpdateBias(weights[i, weights.GetLength(1) - 1]);
 			}
 		}
 		public float[] EvaluateRaw(float[] inputData)
@@ -261,7 +272,7 @@ namespace Intelligence
 	public class NeuralNode
 	{
 		public float[] weight;
-
+		public float bias;
 		public NeuralNode(int size)
 		{
 			weight = new float[size];
@@ -277,6 +288,10 @@ namespace Intelligence
 				weight[i] = newW[row, i];
 			}
 		}
+		public void UpdateBias(float b)
+		{
+			bias = b;
+		}
 		public void Randomize()
 		{
 
@@ -289,17 +304,17 @@ namespace Intelligence
 		{
 			if (inputData.Length != weight.Length) throw new Exception();
 			float output = 0;
-			for (int i = 0; i < weight.Length-1; i++)
+			for (int i = 0; i < weight.Length; i++)
 			{
 				output += inputData[i] * weight[i];
 			}
-			output += weight[weight.Length - 1];
+			output += bias;
 			return output;
 		}
 		public float Evaluate(float[] inputData)
 		{
-			return (float)Math.Tanh(EvaluateRaw(inputData));
 			return EvaluateRaw(inputData);
+			return (float)Math.Tanh(EvaluateRaw(inputData));
 		}
 
 

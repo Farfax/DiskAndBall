@@ -22,13 +22,13 @@ public class ballController : MonoBehaviour
 
 	public void Randomize()
 	{
-		SetPosition(new Vector3(Random.Range(-2, 2), Random.Range(1, 5), Random.Range(-2, 2)));
-		SetVelocity(-(GetPosition() - Vector3.up * GetPosition().y) * Random.Range(0f, 2f));
+		SetPosition(new Vector3(Random.Range(-1f, 1f), Random.Range(1f, 3f), Random.Range(-1f, 1f)));
+		SetVelocity((GetPosition() - Vector3.up * GetPosition().y) * Random.Range(0f, 2f));
 	}
 
 	public Vector3 GetPosition()
 	{
-		return transform.position;
+		return r.position;
 	}
 
 	public Vector3 GetRotation()

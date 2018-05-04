@@ -21,7 +21,11 @@ public class diskController : MonoBehaviour {
 
 	public Vector3 GetRotation()
 	{
-		return transform.eulerAngles;
+		Vector3 rot = transform.eulerAngles;
+		if (rot.x > 180) rot.x -= 360;
+		if (rot.y > 180) rot.y-= 360;
+		if (rot.z > 180) rot.z -= 360;
+		return rot;
 	}
 
 	public void SetPosition(Vector3 pos)
