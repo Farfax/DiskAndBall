@@ -59,7 +59,7 @@ namespace FuzzyLib
         {
             this.context = context;
             principles = new List<AbstractPrinciple>();
-          //  principles.Add(new DefaultPrinciple((con, output) => { re}));
+            principles.Add(new DefaultPrinciple());
           // here is place for Principles definitions
         }
 		public DefaultLogic(float[] ballVelocity, float[] ballPosition, float[] paddleRotation, float[] paddleRotationVelocity)
@@ -82,4 +82,4 @@ namespace FuzzyLib
             return output;
         }
     }
-}
+	}
