@@ -17,7 +17,13 @@ public class ballController : MonoBehaviour
 
 	void Update()
 	{
+		
+	}
 
+	public void Randomize()
+	{
+		SetPosition(new Vector3(Random.Range(-2, 2), Random.Range(1, 5), Random.Range(-2, 2)));
+		SetVelocity(-(GetPosition() - Vector3.up * GetPosition().y) * Random.Range(0f, 2f));
 	}
 
 	public Vector3 GetPosition()
@@ -32,7 +38,8 @@ public class ballController : MonoBehaviour
 
 	public void SetPosition(Vector3 pos)
 	{
-		transform.position = pos;
+		r.MovePosition(pos);
+		//transform.position = pos;
 	}
 
 	public void SetRotation(Vector3 rot)
