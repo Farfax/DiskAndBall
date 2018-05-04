@@ -28,12 +28,13 @@ namespace FuzzyLib
         {
             for (int i = 0; i < vector.Length; i++)
             {
-                vector[i] += range.Item1;
-                vector[i] /= 2*range.Item1 + range.Item2;
+				vector[i] /= range.Item1;
             }
 
             return vector;
         }
+
+		// After conversion we have direct ( - or + ) and 'fuzzy strengh' 0-1 when 1 is max distance from point (0,0).
         public InputContext convertToFuzzy()
         {
             return new InputContext(convertVector(ballSpeed, ballVelocity),convertVector(ballPositionRange, ballPosition), convertVector(paddleRotationRange, paddleRotation), convertVector(paddleSpeed, paddleRotationVelocity));   
