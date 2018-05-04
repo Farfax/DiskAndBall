@@ -35,7 +35,7 @@ namespace FuzzyLib
         // here is our Principle logic
             if(context.ballVelocity[0]>0.5)
             {
-                output.paddleVelocity[0].
+				;
             }
             if (context.ballPosition[0] == context.ballVelocity[0])
                 output.paddleVelocity[0] = 1;
@@ -47,6 +47,8 @@ namespace FuzzyLib
 
 
     }
+
+	//Usage, create InputContext object, then create DefaultLogic(context). Now u can get reponse object by use applyPrinciples().
     public class DefaultLogic
     {
         List<AbstractPrinciple> principles;
@@ -60,8 +62,15 @@ namespace FuzzyLib
           //  principles.Add(new DefaultPrinciple((con, output) => { re}));
           // here is place for Principles definitions
         }
+		public DefaultLogic(float[] ballVelocity, float[] ballPosition, float[] paddleRotation, float[] paddleRotationVelocity)
+		{
+			this.context = new InputContext(ballVelocity, ballPosition, paddleRotation, paddleRotationVelocity).convertToFuzzy();
+			principles = new List<AbstractPrinciple>();
+			//  principles.Add(new DefaultPrinciple((con, output) => { re}));
+			// here is place for Principles definitions
+		}
 
-        public Output applyPrinciples()
+		public Output applyPrinciples()
         {
             Output output = new Output();
 
