@@ -28,7 +28,7 @@ public class diskBallController : MonoBehaviour
 	NeuralNetwork nn;
 	public float learnRate = 0.01f;
 
-	int selectedNet = -1, maxNet = -1, selectedBias=0;
+	int selectedNet = -1, maxNet = -1, selectedBias = 0;
 	List<string> netNames = new List<string>();
 	List<int[]> netsSizes = new List<int[]>();
 	List<List<float[,]>> netsWeights = new List<List<float[,]>>();
@@ -59,8 +59,8 @@ public class diskBallController : MonoBehaviour
 								   { 0.6f,0,1f,0,0}});
 		NewNet("Centering", new int[] { 3 * 4, 4, 3 }, weights);
 		weights = new List<float[,]>();
-		weights.Add(new float[,] { { 0,0,0,0,0,0,1,0,0,0,0,0,0.0f}, { 0,0,0,0,0,0,0,0,-1,0,0,0,0},
-								   { 0,0,-0.3f,-1.0f,0,0,0,0,0,1,0,0,0.0f}, { -0.3f,0,0,0,0,1.0f,0,0,0,0,0,-1,0}});
+		weights.Add(new float[,] { { 0,0,0,0,0,0,1,0,0,1,0,0,0.0f}, { 0,0,0,0,0,0,0,0,-1,0,0,-1,0},
+								   { 0,0,-0.3f,-1.0f,0,0,0,0,0,0,0,0,0.0f}, { -0.3f,0,0,0,0,1.0f,0,0,0,0,0,0,0}});
 		weights.Add(new float[,] { { 0,0.8f,0,1f,0},
 								   { 0,0,0,0,0},
 								   { 0.8f,0,1f,0,0}});
@@ -165,7 +165,7 @@ public class diskBallController : MonoBehaviour
 		nn = Neural.GetNetwork();
 
 		netName.text = "Network Name\n" + netNames[selectedNet];
-		for(int i = 0; i < 4; i++)
+		for (int i = 0; i < 4; i++)
 		{
 			biasSliders[i].value = nn.GetLayers()[0].GetNodes()[i].bias;
 		}
@@ -191,7 +191,7 @@ public class diskBallController : MonoBehaviour
 												input.inputBallPositionVector[0] / 10 + input.inputBallSpeedVector[0] / 2 - input.inputDiskRotationSpeedVector[0] / 4));
 	}
 
-	Material lineMaterial; 
+	Material lineMaterial;
 	void CreateLineMaterial()
 	{
 		if (!lineMaterial)
@@ -216,6 +216,7 @@ public class diskBallController : MonoBehaviour
 		lineMaterial.SetPass(0);
 		GL.PushMatrix();
 		GL.MultMatrix(transform.localToWorldMatrix);
+		GL.MultMatrix(Matrix4x4.Rotate(Quaternion.Euler(Vector3.right*180))* Matrix4x4.Translate(Vector3.back * 15));
 
 		if (nn != null)
 		{
@@ -223,10 +224,10 @@ public class diskBallController : MonoBehaviour
 			for (int i = 0; i < nn.firstLayerSize; i++)
 			{
 				GL.Begin(GL.TRIANGLES);
-					GL.Color(new Color(0.5f, 1, 1, 0.5f));
-				GL.Vertex3(x * 6-6- 0.2f, 0.2f+y - nn.firstLayerSize / 2, 7);
-				GL.Vertex3(x * 6-6, y - nn.firstLayerSize / 2, 7);
-				GL.Vertex3(x * 6-6- 0.2f , -0.2f + y - nn.firstLayerSize / 2, 7);
+				GL.Color(new Color(0.5f, 1, 1, 0.5f));
+				GL.Vertex3(x * 6 - 6 - 0.2f, 0.2f + y - nn.firstLayerSize / 2, 7);
+				GL.Vertex3(x * 6 - 6, y - nn.firstLayerSize / 2, 7);
+				GL.Vertex3(x * 6 - 6 - 0.2f, -0.2f + y - nn.firstLayerSize / 2, 7);
 				GL.End();
 				y++;
 			}
@@ -253,13 +254,16 @@ public class diskBallController : MonoBehaviour
 							GL.Color(new Color(1 + f / 50, 0, 0, 1));
 						else
 							GL.Color(new Color(1, 1, 1, f));
-						GL.Vertex3(x * 6-6, y - l.GetNodes().Length / 2, 7);
-						GL.Vertex3((x - 1) * 6-6, y1 - lastYMax / 2, 7);
+						GL.Vertex3(x * 6 - 6, y - l.GetNodes().Length / 2, 7);
+						GL.Vertex3((x - 1) * 6 - 6, y1 - lastYMax / 2, 7);
 						GL.End();
 						y1++;
 					}
 					GL.Begin(GL.LINES);
+					if (n.bias >= 0)
 						GL.Color(new Color(1, 1, 1, n.bias));
+					else if (n.bias < 0)
+						GL.Color(new Color(-n.bias, 0, 0, 1));
 					GL.Vertex3(x * 6 - 6, y - l.GetNodes().Length / 2, 7);
 					GL.Vertex3((x - 1) * 6 - 6, y1 - lastYMax / 2, 7);
 					GL.End();
@@ -269,6 +273,7 @@ public class diskBallController : MonoBehaviour
 				lastYMax = l.GetNodes().Length;
 			}
 		}
+
 		GL.PopMatrix();
 	}
 }
