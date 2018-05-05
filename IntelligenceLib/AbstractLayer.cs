@@ -6,12 +6,17 @@ namespace FuzzyLib
 {
     public class InputContext
     {
-        private static readonly Tuple<float, float> ballSpeed = new Tuple<float, float>(-50, 50);
-        private static readonly Tuple<float, float> paddleSpeed = new Tuple<float, float>(-50, 50);
-        private static readonly Tuple<float, float> paddleRotationRange = new Tuple<float, float>(-180, 180);
-        private static readonly Tuple<float, float> ballPositionRange = new Tuple<float, float>(-5,5);
-        
-        public float[] ballVelocity { get; }
+		//Fuck U Unity
+		//   private static readonly Tuple<float, float> ballSpeed = new Tuple<float, float>(-50, 50);
+		//  private static readonly Tuple<float, float> paddleSpeed = new Tuple<float, float>(-50, 50);
+		//  private static readonly Tuple<float, float> paddleRotationRange = new Tuple<float, float>(-180, 180);
+		// private static readonly Tuple<float, float> ballPositionRange = new Tuple<float, float>(-5,5);
+		private static readonly float ballSpeed = 50;
+		private static readonly float paddleSpeed = 50; 
+		private static readonly float paddleRotationRange = 180; 
+		private static readonly float ballPositionRange = 5;  
+
+		public float[] ballVelocity { get; }
         public float[] ballPosition { get; }
         public float[] paddleRotation { get; }
         public float[] paddleRotationVelocity { get;}
@@ -24,11 +29,11 @@ namespace FuzzyLib
             this.paddleRotationVelocity = paddleRotationVelocity ?? new float[3];
         }
 
-        private float[] convertVector(Tuple<float, float> range, float[] vector)
+        private float[] convertVector(float range, float[] vector)
         {
             for (int i = 0; i < vector.Length; i++)
             {
-				vector[i] /= range.Item1;
+				vector[i] /= range;
             }
 
             return vector;
