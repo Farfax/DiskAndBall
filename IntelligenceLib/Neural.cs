@@ -100,7 +100,7 @@ namespace Intelligence
 			firstLayerSize = layerSizes[0];
 			for (int i = 1; i < layerSizes.Length; i++)
 			{
-				layers[i - 1] = new NeuralLayer(layerSizes[i], layerSizes[i - 1]);
+				layers[i - 1] = new NeuralLayer(layerSizes[i], layerSizes[i - 1], i != layerSizes.Length - 1);
 				layers[i - 1].UpdateNodes(weights[i - 1]);
 			}
 			timesTrained = 1;
@@ -225,12 +225,12 @@ namespace Intelligence
 	{
 		public NeuralNode[] nodes;
 
-		public NeuralLayer(int size, int previousSize)
+		public NeuralLayer(int size, int previousSize, bool activation = false)
 		{
 			nodes = new NeuralNode[size];
 			for (int i = 0; i < size; i++)
 			{
-				nodes[i] = new NeuralNode(previousSize);
+				nodes[i] = new NeuralNode(previousSize,activation);
 				//Testing
 			}
 		}
@@ -273,9 +273,11 @@ namespace Intelligence
 	{
 		public float[] weight;
 		public float bias;
-		public NeuralNode(int size)
+		public bool tanhActivation;
+		public NeuralNode(int size, bool activation)
 		{
 			weight = new float[size];
+			tanhActivation = activation;
 		}
 		public float[] GetWeights()
 		{
@@ -313,8 +315,9 @@ namespace Intelligence
 		}
 		public float Evaluate(float[] inputData)
 		{
+			if (tanhActivation)
+				return (float)Math.Tanh(EvaluateRaw(inputData));
 			return EvaluateRaw(inputData);
-			return (float)Math.Tanh(EvaluateRaw(inputData));
 		}
 
 

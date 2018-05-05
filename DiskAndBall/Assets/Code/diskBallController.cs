@@ -23,6 +23,7 @@ public class diskBallController : MonoBehaviour
 	bool pause = false;
 
 	public Vector3 diskStartPosition, ballStartPosition, cameraRotation;
+	float cameraDistance = 14;
 	Vector2 lastMouse;
 
 	NeuralNetwork nn;
@@ -59,12 +60,19 @@ public class diskBallController : MonoBehaviour
 								   { 0.6f,0,1f,0,0}});
 		NewNet("Centering", new int[] { 3 * 4, 4, 3 }, weights);
 		weights = new List<float[,]>();
-		weights.Add(new float[,] { { 0,0,0,0,0,0,1,0,0,1,0,0,0.0f}, { 0,0,0,0,0,0,0,0,-1,0,0,-1,0},
-								   { 0,0,-0.3f,-1.0f,0,0,0,0,0,0,0,0,0.0f}, { -0.3f,0,0,0,0,1.0f,0,0,0,0,0,0,0}});
-		weights.Add(new float[,] { { 0,0.8f,0,1f,0},
+		weights.Add(new float[,] { { 0,0,0,0,0,0,0.8f,0,0,0,0,0.4f,0.0f}, { 0,0,0,0,0,0,0,0,-0.8f,0.4f,0,0,0},
+								   { 0,0,-0.3f,-0.0f,0,0,0,0,0,0,0,0,0.0f}, { -0.3f,0,0,0,0,0.0f,0,0,0,0,0,0,0}});
+		weights.Add(new float[,] { { 0,.5f,0,1f,0},
 								   { 0,0,0,0,0},
-								   { 0.8f,0,1f,0,0}});
+								   { .5f,0,1f,0,0}});
 		NewNet("Looping", new int[] { 3 * 4, 4, 3 }, weights);
+		weights = new List<float[,]>();
+		weights.Add(new float[,] { { 0,0,0,0,0,0,1,0,0,0,0,0,1.0f}, { 0,0,0,0,0,0,0,0,-1,0,0,0,1.0f},
+								   { 0,0,-0.3f,-0.0f,0,0,0,0,0,1,0,0,0.5f}, { -0.3f,0,0,0,0,0.0f,0,0,0,0,0,-1,0.5f}});
+		weights.Add(new float[,] { { 0,0.6f,0,1f,0},
+								   { 0,0,0,0,0},
+								   { 0.6f,0,1f,0,0}});
+		NewNet("OnEdge", new int[] { 3 * 4, 4, 3 }, weights);
 
 		ChangeNet(true);
 
@@ -75,10 +83,11 @@ public class diskBallController : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.R)) { Restart(); SetMode(0); }
 		if (Input.GetMouseButton(1))
 		{
+			cameraDistance -= Input.mouseScrollDelta.y;
 			cameraRotation += new Vector3(-Input.mousePosition.y + lastMouse.y, Input.mousePosition.x - lastMouse.x, 0);
 			Camera.main.transform.position = Vector3.zero;
 			Camera.main.transform.eulerAngles = cameraRotation;
-			Camera.main.transform.position = -Camera.main.transform.forward * 14 + Vector3.up * 3;
+			Camera.main.transform.position = -Camera.main.transform.forward * cameraDistance + Vector3.up * 3;
 		}
 		lastMouse = Input.mousePosition;
 	}
@@ -127,14 +136,18 @@ public class diskBallController : MonoBehaviour
 		mode = (EvaluationMode)newmode;
 		if (newmode == 1)
 		{
-			ballCtrl.Randomize();
+		//	ballCtrl.Randomize();
 
 		}
 		if (newmode == 3)
 		{
 			//	manualDiskCtrl.SetManualControl(true);
-			ballCtrl.Randomize();
+			//ballCtrl.Randomize();
 		}
+	}
+	public void NewSimulation()
+	{
+		if(mode>0) ballCtrl.Randomize();
 	}
 	public void BiasUpdate(int i)
 	{
@@ -183,6 +196,8 @@ public class diskBallController : MonoBehaviour
 		ballCtrl.SetRotation(Vector3.zero);
 		ballCtrl.SetVelocity(Vector3.zero);
 		ballCtrl.SetAngularVelocity(Vector3.zero);
+		ball.GetComponent<TrailRenderer>().Clear();
+
 	}
 
 	void SimpleAI(InputData input)
@@ -216,7 +231,7 @@ public class diskBallController : MonoBehaviour
 		lineMaterial.SetPass(0);
 		GL.PushMatrix();
 		GL.MultMatrix(transform.localToWorldMatrix);
-		GL.MultMatrix(Matrix4x4.Rotate(Quaternion.Euler(Vector3.right*180))* Matrix4x4.Translate(Vector3.back * 15));
+		GL.MultMatrix(Matrix4x4.Rotate(Quaternion.Euler(Vector3.right * 180)) * Matrix4x4.Translate(Vector3.back * 15));
 
 		if (nn != null)
 		{

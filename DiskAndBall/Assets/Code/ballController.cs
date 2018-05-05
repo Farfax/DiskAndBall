@@ -24,6 +24,7 @@ public class ballController : MonoBehaviour
 	{
 		SetPosition(new Vector3(Random.Range(-1f, 1f), Random.Range(1f, 3f), Random.Range(-1f, 1f)));
 		SetVelocity((GetPosition() - Vector3.up * GetPosition().y) * Random.Range(0f, 2f));
+		GetComponent<TrailRenderer>().Clear();
 	}
 
 	public Vector3 GetPosition()
@@ -38,8 +39,8 @@ public class ballController : MonoBehaviour
 
 	public void SetPosition(Vector3 pos)
 	{
-		r.MovePosition(pos);
-		//transform.position = pos;
+		//r.MovePosition(pos);
+		transform.position = pos;
 	}
 
 	public void SetRotation(Vector3 rot)
