@@ -66,7 +66,7 @@ namespace FuzzyLib
 		{
 			this.context = new InputContext(ballVelocity, ballPosition, paddleRotation, paddleRotationVelocity).convertToFuzzy();
 			principles = new List<AbstractPrinciple>();
-			//  principles.Add(new DefaultPrinciple((con, output) => { re}));
+			principles.Add(new DefaultPrinciple());
 			// here is place for Principles definitions
 		}
 
