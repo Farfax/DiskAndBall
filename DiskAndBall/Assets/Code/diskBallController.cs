@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Intelligence;
+using FuzzyLib;
 
 
 public class diskBallController : MonoBehaviour
@@ -76,6 +77,97 @@ public class diskBallController : MonoBehaviour
 
 		ChangeNet(true);
 
+		FuzzyLogic.AddRule(new Rule
+		{
+			usedFunctions = new int[] { 0, 0, 1, 0, 0, 0, 10, 0, 0, 18, 0, 0 },
+			weight = 0.2f
+		}, true);
+		FuzzyLogic.AddRule(new Rule
+		{
+			usedFunctions = new int[] { 0, 0, 3, 0, 0, 0, 10, 0, 0, 16, 0, 0 },
+			weight = -0.2f
+		}, true);
+
+
+
+		FuzzyLogic.AddRule(new Rule
+		{
+			usedFunctions = new int[] { 3, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 18 },
+			weight = -0.2f
+		}, false);
+		FuzzyLogic.AddRule(new Rule
+		{
+			usedFunctions = new int[] { 1, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 16 },
+			weight = 0.2f
+		}, false);
+
+
+		FuzzyLogic.AddRule(new Rule
+		{
+			usedFunctions = new int[] { 0, 0, 1, 0, 0, 0, 13, 0, 0, 18, 0, 0 },
+			weight = 0.2f
+		}, true);
+		FuzzyLogic.AddRule(new Rule
+		{
+			usedFunctions = new int[] { 0, 0, 3, 0, 0, 0, 11, 0, 0, 16, 0, 0 },
+			weight = -0.2f
+		}, true);
+
+
+
+		FuzzyLogic.AddRule(new Rule
+		{
+			usedFunctions = new int[] { 3, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 18 },
+			weight = -0.2f
+		}, false);
+		FuzzyLogic.AddRule(new Rule
+		{
+			usedFunctions = new int[] { 1, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 16 },
+			weight = 0.2f
+		}, false);
+
+
+
+		FuzzyLogic.AddRule(new Rule
+		{
+			usedFunctions = new int[] { 0, 0, 1, 0, 0, 0, 14, 0, 0, 18, 0, 0 },
+			weight = 2.9f
+		}, true);
+		FuzzyLogic.AddRule(new Rule
+		{
+			usedFunctions = new int[] { 0, 0, 3, 0, 0, 0, 10, 0, 0, 16, 0, 0 },
+			weight = -2.9f
+		}, true);
+
+
+
+		FuzzyLogic.AddRule(new Rule
+		{
+			usedFunctions = new int[] { 3, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 18 },
+			weight = -2.9f
+		}, false);
+		FuzzyLogic.AddRule(new Rule
+		{
+			usedFunctions = new int[] { 1, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 16 },
+			weight = 2.9f
+		}, false);
+
+		return;
+		Color[] colors = new Color[] { Color.red, Color.yellow, Color.gray, Color.blue, Color.green };
+		for (int z = 0; z < 4; z++)
+		{
+			for (int i = -50; i < 50; i++)
+			{
+				for (int j = 0; j < 5; j++)
+				{
+					//if (j % 2 == 0) continue;
+					float i2 = i / 4f;
+					float x = MembershipFunctions.functionCollection[j + 5 * z](i2), x2 = MembershipFunctions.functionCollection[j + 5 * z](i2 - 1 / 4f);
+
+					Debug.DrawLine(Vector3.up * (1.5f * z + 3 + x) + Vector3.right * i2 / 10f, Vector3.up * (1.5f * z + 3 + x2) + Vector3.right * (i2 / 10f - 1 / 40f), colors[j], 100);
+				}
+			}
+		}
 	}
 
 	private void Update()
@@ -104,7 +196,9 @@ public class diskBallController : MonoBehaviour
 				diskCtrl.SetAngularVelocity(FloatToVector3(neuralOutput.outputDiskRotationSpeedVector));
 				break;
 			case EvaluationMode.Fuzzy:
-
+				OutputData fuzzyOutput = FuzzyLogic.Evaluate(PrepareData());
+			//	fuzzyOutput.outputDiskRotationSpeedVector[2] = -fuzzyOutput.outputDiskRotationSpeedVector[2];
+				diskCtrl.SetAngularVelocity(FloatToVector3(fuzzyOutput.outputDiskRotationSpeedVector));
 				break;
 				/*		case EvaluationMode.TrainNeural:
 							OutputData neuralOutputExp = new OutputData(Vector3ToFloat(diskCtrl.GetAngularVelocity()));
@@ -136,7 +230,7 @@ public class diskBallController : MonoBehaviour
 		mode = (EvaluationMode)newmode;
 		if (newmode == 1)
 		{
-		//	ballCtrl.Randomize();
+			//	ballCtrl.Randomize();
 
 		}
 		if (newmode == 3)
@@ -147,7 +241,7 @@ public class diskBallController : MonoBehaviour
 	}
 	public void NewSimulation()
 	{
-		if(mode>0) ballCtrl.Randomize();
+		if (mode > 0) ballCtrl.Randomize();
 	}
 	public void BiasUpdate(int i)
 	{

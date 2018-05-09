@@ -22,6 +22,14 @@ namespace Intelligence
 			inputBallPositionVector = Bp;
 			inputBallSpeedVector = Bs;
 		}
+		public float[] Collapse()
+		{
+			List<float> list = new List<float>(inputDiskRotationVector);
+			list.AddRange(inputDiskRotationSpeedVector);
+			list.AddRange(inputBallPositionVector);
+			list.AddRange(inputBallSpeedVector);
+			return list.ToArray();
+		}
 	}
 	public struct OutputData
 	{

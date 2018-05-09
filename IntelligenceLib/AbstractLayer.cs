@@ -16,7 +16,7 @@ namespace FuzzyLib
 		private static readonly float paddleRotationRange = 180; 
 		private static readonly float ballPositionRange = 5;  
 
-		public float[] ballVelocity { get; }
+		public float[] ballVelocity { get; } 
         public float[] ballPosition { get; }
         public float[] paddleRotation { get; }
         public float[] paddleRotationVelocity { get;}

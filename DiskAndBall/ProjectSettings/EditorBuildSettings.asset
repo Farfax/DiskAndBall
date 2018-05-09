@@ -6,11 +6,5 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/main.unity
-    guid: 7737594379027f64bb537f88886176d5
-  - enabled: 1
-    path: Assets/neural.unity
+    path: Assets/scene.unity
     guid: 172b7da0c412b6440b28491a49b8f7b5
-  - enabled: 1
-    path: Assets/fuzzy.unity
-    guid: 0ec678a0f3b71164a8f044fdfc2d947d

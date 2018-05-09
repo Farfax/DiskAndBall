@@ -12,7 +12,6 @@ public class ballController : MonoBehaviour
 	void Start()
 	{
 		r = GetComponent<Rigidbody>();
-
 	}
 
 	void Update()
@@ -29,6 +28,7 @@ public class ballController : MonoBehaviour
 
 	public Vector3 GetPosition()
 	{
+		if(!r) r = GetComponent<Rigidbody>();
 		return r.position;
 	}
 
